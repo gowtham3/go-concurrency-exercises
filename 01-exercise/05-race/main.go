@@ -12,10 +12,14 @@ import (
 func main() {
 	start := time.Now()
 	var t *time.Timer
+	ch := make(chan bool)
 	t = time.AfterFunc(randomDuration(), func() {
 		fmt.Println(time.Now().Sub(start))
-		t.Reset(randomDuration())
+		ch <- true
 	})
+
+	<- ch
+	t.Reset(randomDuration())
 	time.Sleep(5 * time.Second)
 }
 
